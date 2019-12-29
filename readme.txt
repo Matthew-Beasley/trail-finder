@@ -1,10 +1,12 @@
 Mountain Project Data API
 
+mapbox token: pk.eyJ1IjoiY29uYmVjIiwiYSI6ImNrNHE3dWdvZDM2MzczanF4aDNiZjZweXgifQ.hicY00hru5iAZ4dg_0Cupg
+
 api docs: https://www.mountainproject.com/data
 
 api key: 200657331-fb49257b90603a32bd0fa8152f60be3d
 
-getRoute: https://www.mountainproject.com/data/get-routes?routeIds=105748391,105750454,105749956&key=<mykey>
+getRoute: https://www.mountainproject.com/data/get-routes-for-lat-lon?lat=40.03&lon=-105.25&maxDistance=10&minDiff=5.6&maxDiff=5.10&key=<mykey>
 
 getUser: https://www.mountainproject.com/data/get-user?email=conbec@outlook.com&key=<mykey>
 

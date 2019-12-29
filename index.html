@@ -7,6 +7,8 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
         <script src="js/elementData.js" defer></script>
         <script src="js/app.js" defer></script>
@@ -16,21 +18,28 @@
         <!-- Search for routes by location, type, rating, pitches, stars -->
         <h2>Climbers Route Index</h2>
         <form id="search-form">
-            <label>State</label>
-            <select name="state" value="all" id="location">State</select>
             <label>Type</label>
-            <select name="type" value="all" id="climb-type">Route Type</select>
+            <select name="type" value="all" id="type">Route Type</select>
             <label>Rating</label>
             <select name="rating" value="all" id="rating">Rating</select>
             <label>Pitches</label>
             <select name="pitches" value="all" id="pitches">Pitches</select>
             <label>Stars</label>
             <select name="stars" value="all" id="stars">Stars</select>
+            <label>Maximum Distance</label>
+            <select name="distance" value="20" id="distance">Distance</select>
+            <label>Search for:</label>
+            <select name="search" value="routes" id="search">Routes or Users</select>
             <button value="submit" id="submit-button">Submit</button>
         </form>
     </header>
     <main>
+        <div id="mapid">
+
+        </div>
+
         <!--random default route displayed until search submitted -->
+
     </main>
 
     <body>
