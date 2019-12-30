@@ -43,6 +43,8 @@ makeMap
     response.on('click', (event) => {
         LATITUDE = event.latlng.lat;
         LONGITUDE = event.latlng.lng;
+        document.querySelector('#lat').value = LATITUDE;
+        document.querySelector('#lon').value = LONGITUDE;
     });
 })
 // on load display random climbs
@@ -61,9 +63,6 @@ const getClimbData = (url) => {
     return axios.get(url)
 }
 
-// create cards for climbs
-    // go grab imgs from data urls
-    // create display html
 const displayClimbs = (dataObj) => {
     const routes = dataObj.data.routes;
     let html = '';
