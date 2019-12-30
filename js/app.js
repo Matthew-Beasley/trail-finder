@@ -1,5 +1,6 @@
 //============ GLOBAL VARIABLES ============================ //REFACTOR take some of these out of the global scope
 const submitBtn = document.querySelector('#submit-button');
+const mapBtn = document.querySelector('#map-button');
 
 const LOCATION = document.querySelector('#location');
 const TYPE = document.querySelector('#type');           //REFACTOR use more of these params in the url
@@ -11,8 +12,6 @@ const DISTANCE = document.querySelector('#distance');
 
 let LATITUDE = 40.50; //load map in Nebraska :-)
 let LONGITUDE = -98.61;
-
-let MAP = null;
 
 const BASE_URL = 'https://www.mountainproject.com/data/';
 const API_KEY = '200657331-fb49257b90603a32bd0fa8152f60be3d';
@@ -52,7 +51,6 @@ const buildURL = () => {
     let url = BASE_URL;
     if (SEARCH.value === 'routes'){     //REFACTOR need to make rating a range, break this down to managable pieces, finish users
         url += `get-routes-for-lat-lon?lat=${LATITUDE}&lon=${LONGITUDE}&maxDistance=${DISTANCE.value}&minDiff=${RATING.value}6&maxDiff=${RATING.value}&key=${API_KEY}`;
-        console.log(url);
     } else if (SEARCH.value === 'users') {
         url += `get-user?key=${API_KEY}`;
     }
@@ -66,15 +64,61 @@ const getClimbData = (url) => {
 // create cards for climbs
     // go grab imgs from data urls
     // create display html
+const displayClimbs = (dataObj) => {
+    const routes = dataObj.data.routes;
+    let html = '';
 
-    //style all this shit so it works
+    routes.forEach(route => {
+        console.log(route);
+        html +=
+        `<div class="card">
+            <img src="${route.imgSmall}">
+            <h3>${route.name}</h3> 
+            <div class="list-container">
+                <ul class="route-info">
+                    <li>Type: ${route.type}</li>
+                    <li>Difficulty: ${route.rating}</li>
+                    <li>Stars: ${route.stars}</li>
+                    <li>Pitches: ${route.pitches}</li>
+                </ul> 
+                <ul class="location">
+                    <li>Location:</li>
+                    <li>${route.location[0]}</li>
+                    <li>${route.location[1]}</li>
+                    <li>${route.location[2]}</li>
+                    <li>${route.location[3]}</li>
+                    <li>${route.location[4]}</li>
+                </ul>
+            </div>
+        </div>`
+    });
+
+    document.querySelector('#desk-top').innerHTML = html;
+}
+
+const toggleMap = (selector) => {
+    const mapDiv = document.querySelector('#mapid');
+    const deskTop = document.querySelector('#desk-top')
+
+    if (selector === 'on') {
+        mapDiv.classList.add('active');
+        deskTop.classList.add('active')
+    }
+    else if (selector === 'off') {
+        mapDiv.classList.remove('active');
+        deskTop.innerHTML = '';
+        deskTop.classList.remove('active');
+    }
+}
 
 // REFACTOR need to add user search and display to this
 const submitQuery = async (event) => {
     event.preventDefault();
+    toggleMap('off')
     const fullURL = buildURL();
     const climbData = await getClimbData(fullURL);
     displayClimbs(climbData)
 }
-
+document.querySelector('#mapid').style.cursor = 'crosshair';
 submitBtn.addEventListener('click', submitQuery);
+mapBtn.addEventListener('click', () => {toggleMap('on')});
