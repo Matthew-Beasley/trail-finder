@@ -112,6 +112,7 @@ const selectData = {
     ],
 
     DISTANCE: [
+        100,
         10,
         20,
         50,
