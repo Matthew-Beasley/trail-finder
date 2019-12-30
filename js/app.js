@@ -19,9 +19,9 @@ const API_KEY = '200657331-fb49257b90603a32bd0fa8152f60be3d';
 
 //===========================================================
 
-// REFACTOR return a promise, store urls in variables
-const makeMap = () => {
-    MAP = L.map('mapid').setView([LATITUDE, LONGITUDE], 4);
+// REFACTOR store urls in variables
+const makeMap = new Promise((resolve, reject) => {
+    let MAP = L.map('mapid').setView([LATITUDE, LONGITUDE], 4);
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY29uYmVjIiwiYSI6ImNrNHE3dWdvZDM2MzczanF4aDNiZjZweXgifQ.hicY00hru5iAZ4dg_0Cupg', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -30,23 +30,24 @@ const makeMap = () => {
         accessToken: 'pk.eyJ1IjoiY29uYmVjIiwiYSI6ImNrNHE3dWdvZDM2MzczanF4aDNiZjZweXgifQ.hicY00hru5iAZ4dg_0Cupg'
     }).addTo(MAP);
 
-    console.log('in makemap', MAP)
-    return MAP
-}
-
-// make the map and listen for clicks
-const theMAP = makeMap();
-console.log('before click event code', theMAP)
-
-theMAP.on('click', (event) => {
-    LATITUDE = event.latlng.lat;
-    LONGITUDE = event.latlng.lng;
+    if (MAP){
+        resolve(MAP);
+    }
+    else {
+        reject(Error('failed to fetch map tile'));
+    }
 });
 
+// make the map and listen for clicks
+makeMap
+.then(response => {
+    response.on('click', (event) => {
+        LATITUDE = event.latlng.lat;
+        LONGITUDE = event.latlng.lng;
+    });
+})
 // on load display random climbs
 
-//collect selections from form
-//build url
 const buildURL = () => {
     let url = BASE_URL;
     if (SEARCH.value === 'routes'){     //REFACTOR need to make rating a range, break this down to managable pieces, finish users
@@ -58,8 +59,9 @@ const buildURL = () => {
     return url;
 }
 
-// make axios call, catch data (async or then)
-
+const getClimbData = (url) => {
+    return axios.get(url)
+}
 
 // create cards for climbs
     // go grab imgs from data urls
@@ -67,9 +69,12 @@ const buildURL = () => {
 
     //style all this shit so it works
 
-const submitQuery = (event) => {
+// REFACTOR need to add user search and display to this
+const submitQuery = async (event) => {
     event.preventDefault();
     const fullURL = buildURL();
+    const climbData = await getClimbData(fullURL);
+    displayClimbs(climbData)
 }
 
 submitBtn.addEventListener('click', submitQuery);
