@@ -37,7 +37,6 @@ const makeMap = new Promise((resolve, reject) => {
     }
 });
 
-// make the map and listen for clicks
 makeMap
 .then(response => {
     response.on('click', (event) => {
@@ -47,7 +46,6 @@ makeMap
         document.querySelector('#lon').value = LONGITUDE;
     });
 })
-// on load display random climbs
 
 const buildURL = () => {
     let url = BASE_URL;
@@ -63,12 +61,22 @@ const getClimbData = (url) => {
     return axios.get(url)
 }
 
+//REFACTOR pitches comes up blank because keys are hard coded
+const sterilizeRouteData = (routeData) => {
+    for (let key in routeData){
+        if (key === undefined || key === '') {
+            delete routeData.key;
+        }
+    }
+    return routeData;
+}
+
 const displayClimbs = (dataObj) => {
     const routes = dataObj.data.routes;
     let html = '';
-
+    //REFACTOR pitches comes up empty, key hardcoded
     routes.forEach(route => {
-        console.log(route);
+        route = sterilizeRouteData(route);
         html +=
         `<div class="card">
             <img src="${route.imgSmall}">
@@ -78,15 +86,13 @@ const displayClimbs = (dataObj) => {
                     <li>Type: ${route.type}</li>
                     <li>Difficulty: ${route.rating}</li>
                     <li>Stars: ${route.stars}</li>
-                    <li>Pitches: ${route.pitches}</li>
+                    <li>Pitches: ${route.pitches}</li> 
                 </ul> 
-                <ul class="location">
+                <ul class="location">Location
                     <li>Location:</li>
-                    <li>${route.location[0]}</li>
-                    <li>${route.location[1]}</li>
-                    <li>${route.location[2]}</li>
-                    <li>${route.location[3]}</li>
-                    <li>${route.location[4]}</li>
+                    ${route.location.map(locale => `
+                        <li>${locale}</li>
+                    `).join('\n')}
                 </ul>
             </div>
         </div>`
