@@ -1,16 +1,19 @@
-//============ GLOBAL VARIABLES ============================ //REFACTOR take some of these out of the global scope
+//============ GLOBAL VARIABLES ============================
+
+//REFACTOR take some of these out of the global scope
 const submitBtn = document.querySelector('#submit-button');
 const mapBtn = document.querySelector('#map-button');
+const deskTop = document.querySelector('#desk-top');
 
-const LOCATION = document.querySelector('#location');
-const TYPE = document.querySelector('#type');           //REFACTOR use more of these params in the url
+const TYPE = document.querySelector('#type');
 const RATING = document.querySelector('#rating');
 const PITCHES = document.querySelector('#pitches');
 const STARS = document.querySelector('#stars');
 const SEARCH = document.querySelector('#search');
 const DISTANCE = document.querySelector('#distance');
+const EMAIL = document.querySelector('#email');
 
-let LATITUDE = 40.50; //load map in Nebraska :-)
+let LATITUDE = 40.50; //loading map in Nebraska :-)
 let LONGITUDE = -98.61;
 
 const BASE_URL = 'https://www.mountainproject.com/data/';
@@ -50,8 +53,10 @@ makeMap
 const buildURL = () => {
     let url = BASE_URL;
     if (SEARCH.value === 'routes'){     //REFACTOR need to make rating a range, break this down to managable pieces, finish users
-        url += `get-routes-for-lat-lon?lat=${LATITUDE}&lon=${LONGITUDE}&maxDistance=${DISTANCE.value}&minDiff=${RATING.value}6&maxDiff=${RATING.value}&key=${API_KEY}`;
+        url += `get-routes-for-lat-lon?lat=${LATITUDE}&lon=${LONGITUDE}&maxDistance=${DISTANCE.value}`;
+        url += `&minDiff=${RATING.value}6&maxDiff=${RATING.value}&stars=${STARS}&pitches=${PITCHES}&type=${TYPE}&key=${API_KEY}`;
     } else if (SEARCH.value === 'users') {
+        url = `https://www.mountainproject.com/data/get-user?email=${EMAIL.value}&key=${API_KEY}`;
         url += `get-user?key=${API_KEY}`;
     }
     return url;
@@ -71,6 +76,14 @@ const sterilizeRouteData = (routeData) => {
     return routeData;
 }
 
+//REFACTOR do string parsing to get the big picture displayed here
+const displayBigCard = async ({target}) => {
+    if (target.classList.contains('card')){
+        deskTop.innerHTML = 'Sorry, under construction';
+        deskTop.innerHTML += target.outerHTML;
+   }
+}
+
 const displayClimbs = (dataObj) => {
     const routes = dataObj.data.routes;
     let html = '';
@@ -79,7 +92,7 @@ const displayClimbs = (dataObj) => {
         route = sterilizeRouteData(route);
         html +=
         `<div class="card">
-            <img src="${route.imgSmall}">
+            <img src="${route.imgSmallMed}">
             <h3>${route.name}</h3> 
             <div class="list-container">
                 <ul class="route-info">
@@ -88,8 +101,8 @@ const displayClimbs = (dataObj) => {
                     <li>Stars: ${route.stars}</li>
                     <li>Pitches: ${route.pitches}</li> 
                 </ul> 
-                <ul class="location">Location
-                    <li>Location:</li>
+                <ul class="location">
+                    <li>Location: ${route.name}</li>
                     ${route.location.map(locale => `
                         <li>${locale}</li>
                     `).join('\n')}
@@ -103,16 +116,15 @@ const displayClimbs = (dataObj) => {
 
 const toggleMap = (selector) => {
     const mapDiv = document.querySelector('#mapid');
-    const deskTop = document.querySelector('#desk-top')
 
     if (selector === 'on') {
         mapDiv.classList.add('active');
-        deskTop.classList.add('active')
+        deskTop.classList.remove('active');
     }
     else if (selector === 'off') {
         mapDiv.classList.remove('active');
         deskTop.innerHTML = '';
-        deskTop.classList.remove('active');
+        deskTop.classList.add('active');
     }
 }
 
@@ -124,6 +136,8 @@ const submitQuery = async (event) => {
     const climbData = await getClimbData(fullURL);
     displayClimbs(climbData)
 }
+
 document.querySelector('#mapid').style.cursor = 'crosshair';
 submitBtn.addEventListener('click', submitQuery);
 mapBtn.addEventListener('click', () => {toggleMap('on')});
+deskTop.addEventListener('click', displayBigCard);

@@ -1,3 +1,4 @@
+
 header {
     display: flex;
     flex-direction: row;
@@ -27,13 +28,6 @@ main {
     flex-direction: column;
 }
 
-#desk-top {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin: 1rem;
-}
-
 #mapid {
     height: 0px;
 }
@@ -52,6 +46,7 @@ main {
     flex-direction: row;
     flex-wrap: wrap;
     margin: 1rem;
+    background-image: url('../img/home-image.jpg');
 }
 
 #desk-top {
