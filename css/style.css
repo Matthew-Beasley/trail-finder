@@ -1,5 +1,5 @@
 
-header {
+header { /* REFACTOR make header sticky */
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;

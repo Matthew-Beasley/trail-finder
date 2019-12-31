@@ -19,25 +19,35 @@
         <h2>Climbers Route Index</h2>
         <h4>Click map to select climbing area</h4>
         <form id="search-form">
-            <label>Lat</label>
-            <input type="text" name="lat" value="0" id="lat">Lat</input>
-            <label>Lon</label>
-            <input type="text" name="lon" value="0" id="lon">Lon</input>
-            <label>Type</label>
-            <select name="type" value="all" id="type">Route Type</select>
-            <label>Rating</label>
-            <select name="rating" value="all" id="rating">Rating</select>
-            <label>Pitches</label>
-            <select name="pitches" value="all" id="pitches">Pitches</select>
-            <label>Stars</label>
-            <select name="stars" value="all" id="stars">Stars</select>
-            <label>Maximum Distance</label>
-            <select name="distance" value="100" id="distance">Distance</select>
-            <label>Search for:</label>
-            <select name="search" value="routes" id="search">Routes or Users</select>
-            <input type="text" name="email" value="" id="email" placeholder="user@emeail">Email</input>
-            <button value="submit" id="submit-button">Submit</button>
-            <button value="map" id="map-button">Go to Map</button>
+            <div id="lat-lon">
+                <label>Lat</label>
+                <input type="text" name="lat" value="0" id="lat">Lat</input>
+                <label>Lon</label>
+                <input type="text" name="lon" value="0" id="lon">Lon</input>
+            </div>
+            <div id="type-pitches-ratings">
+                <label>Type</label>
+                <select name="type" value="all" id="type">Route Type</select>
+                <label>Pitches</label>
+                <select name="pitches" value="all" id="pitches">Pitches</select>
+                <label>Rating</label>
+                <select name="rating" value="all" id="rating">Rating</select>
+            </div>
+            <div id="rating-stars">
+                <label>Stars</label>
+                <select name="stars" value="all" id="stars">Stars</select>
+                <label>Maximum Distance</label>
+                <select name="distance" value="100" id="distance">Distance</select>
+            </div>
+            <div id="nav">
+                <label>Search for:</label>
+                <select name="search" value="routes" id="search">Routes or Users</select>
+                <input type="text" name="email" value="" id="email" placeholder="user@emeail">Email</input>
+                <div id="buttons">
+                    <button value="submit" id="submit-button">Submit</button>
+                    <button value="map" id="map-button">Go to Map</button>
+                </div>
+            </div>
         </form>
     </header>
     <main>

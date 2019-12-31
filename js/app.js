@@ -21,7 +21,7 @@ const API_KEY = '200657331-fb49257b90603a32bd0fa8152f60be3d';
 
 //===========================================================
 
-// REFACTOR store urls in variables
+// REFACTOR store urls in variables?
 const makeMap = new Promise((resolve, reject) => {
     let MAP = L.map('mapid').setView([LATITUDE, LONGITUDE], 4);
 
@@ -51,13 +51,12 @@ makeMap
 })
 
 const buildURL = () => {
-    let url = BASE_URL;
+    let url = '';
     if (SEARCH.value === 'routes'){     //REFACTOR need to make rating a range, break this down to managable pieces, finish users
-        url += `get-routes-for-lat-lon?lat=${LATITUDE}&lon=${LONGITUDE}&maxDistance=${DISTANCE.value}`;
+        url += `${BASE_URL}get-routes-for-lat-lon?lat=${LATITUDE}&lon=${LONGITUDE}&maxDistance=${DISTANCE.value}`;
         url += `&minDiff=${RATING.value}6&maxDiff=${RATING.value}&stars=${STARS}&pitches=${PITCHES}&type=${TYPE}&key=${API_KEY}`;
     } else if (SEARCH.value === 'users') {
-        url = `https://www.mountainproject.com/data/get-user?email=${EMAIL.value}&key=${API_KEY}`;
-        url += `get-user?key=${API_KEY}`;
+        url = `${BASE_URL}get-user?email=${EMAIL.value}&key=${API_KEY}`;
     }
     return url;
 }
@@ -66,18 +65,18 @@ const getClimbData = (url) => {
     return axios.get(url)
 }
 
-//REFACTOR pitches comes up blank because keys are hard coded
-const sterilizeRouteData = (routeData) => {
-    for (let key in routeData){
+const sterilizeData = (data) => {
+    for (let key in data){
         if (key === undefined || key === '') {
-            delete routeData.key;
+            delete data.key;
         }
     }
-    return routeData;
+    return data;
 }
 
-//REFACTOR do string parsing to get the big picture displayed here
-const displayBigCard = async ({target}) => {
+//REFACTOR do string parsing to get the big picture displayed when a card is clicked,
+//         need to be able to go back to previous page without reloading map
+const displayBigCard = ({target}) => {
     if (target.classList.contains('card')){
         deskTop.innerHTML = 'Sorry, under construction';
         deskTop.innerHTML += target.outerHTML;
@@ -87,9 +86,9 @@ const displayBigCard = async ({target}) => {
 const displayClimbs = (dataObj) => {
     const routes = dataObj.data.routes;
     let html = '';
-    //REFACTOR pitches comes up empty, key hardcoded
+    //REFACTOR pitches comes up empty sometimes, key hardcoded
     routes.forEach(route => {
-        route = sterilizeRouteData(route);
+        route = sterilizeData(route);
         html +=
         `<div class="card">
             <img src="${route.imgSmallMed}">
@@ -114,6 +113,19 @@ const displayClimbs = (dataObj) => {
     document.querySelector('#desk-top').innerHTML = html;
 }
 
+//REFACTOR better/more data displayed
+const displayUsers = (dataObj) => {
+    let user = dataObj.data;
+    user = sterilizeData(user);
+    let html =
+        `<div class="card">
+            <img src="${user.avatar}">
+            <h3>${user.name}</h3> 
+            <a href="${user.url}">User URL</a>
+        </div>`;
+    deskTop.innerHTML = html;
+}
+
 const toggleMap = (selector) => {
     const mapDiv = document.querySelector('#mapid');
 
@@ -128,13 +140,18 @@ const toggleMap = (selector) => {
     }
 }
 
-// REFACTOR need to add user search and display to this
 const submitQuery = async (event) => {
     event.preventDefault();
     toggleMap('off')
     const fullURL = buildURL();
     const climbData = await getClimbData(fullURL);
-    displayClimbs(climbData)
+
+    if (SEARCH.value === 'routes') {
+        displayClimbs(climbData)
+        console.log('in the route if statement')
+    } else if (SEARCH.value === 'users') {
+        displayUsers(climbData);
+    }
 }
 
 document.querySelector('#mapid').style.cursor = 'crosshair';
