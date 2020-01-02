@@ -76,10 +76,32 @@ const sterilizeData = (data) => {
 
 //REFACTOR do string parsing to get the big picture displayed when a card is clicked,
 //         need to be able to go back to previous page without reloading map
-const displayBigCard = ({target}) => {
-    if (target.classList.contains('card')){
-        deskTop.innerHTML = 'Sorry, under construction';
-        deskTop.innerHTML += target.outerHTML;
+const displayBigCard = async ({target}) => {
+    if (!target.classList.contains('desk-top')){
+        const routeID = target.children[0].innerText;
+        const url = `${BASE_URL}get-routes?routeIds=${routeID}&key=${API_KEY}`;
+        const routeData = await getClimbData(url);
+        const route = routeData.data.routes[0];
+        const html =
+        `<div id="big-card">
+            <img src="${route.imgMedium}">
+            <h3>${route.name}</h3> 
+            <div class="list-container">
+                <ul class="route-info">
+                    <li>Type: ${route.type}</li>
+                    <li>Difficulty: ${route.rating}</li>
+                    <li>Stars: ${route.stars}</li>
+                    <li>Pitches: ${route.pitches}</li> 
+                </ul> 
+                <ul class="location">
+                    <li>Location: ${route.name}</li>
+                    ${route.location.map(locale => `
+                        <li>${locale}</li>
+                    `).join('\n')}
+                </ul>
+            </div>
+        </div>`
+        deskTop.innerHTML = html;
    }
 }
 
@@ -91,7 +113,8 @@ const displayClimbs = (dataObj) => {
         route = sterilizeData(route);
         html +=
         `<div class="card">
-            <img src="${route.imgSmallMed}">
+            <div class="route-id">${route.id}</div>
+            <img src="${route.imgSmall}">
             <h3>${route.name}</h3> 
             <div class="list-container">
                 <ul class="route-info">
@@ -148,7 +171,6 @@ const submitQuery = async (event) => {
 
     if (SEARCH.value === 'routes') {
         displayClimbs(climbData)
-        console.log('in the route if statement')
     } else if (SEARCH.value === 'users') {
         displayUsers(climbData);
     }

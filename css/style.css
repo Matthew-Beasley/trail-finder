@@ -105,7 +105,20 @@ main {
     padding: 1rem;
     width: 400px;
     background-color: lightgrey;
-    
+}
+
+#big-card {
+    justify-items: center;
+    border: 1px solid black;
+    border-radius: 15px;
+    margin: 1rem;
+    padding: 1rem;
+    min-width: 85%;
+    background-color: lightgrey;
+}
+
+.route-id {
+    display: none;
 }
 
 .list-container {
