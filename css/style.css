@@ -3,7 +3,7 @@ header { /* REFACTOR make header sticky */
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-between;
+    justify-content: space-evenly;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1rem;
     border-bottom: 1px solid darkslategrey;
@@ -62,16 +62,19 @@ select {
 }
 
 button {
-    width: 5rem;
-    height: 1.25rem;
+    width: 6rem;
+    height: 2rem;
+    font-size: 1rem;
     margin-top: .5rem;
     background-color: lightgrey;
+    line-height: 2rem;
 }
 
 main {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 #mapid {
@@ -80,6 +83,7 @@ main {
 
 #mapid.active {
     height: 600px;
+    width: 80%;
 }
 
 #desk-top {
@@ -90,6 +94,7 @@ main {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-around;
     margin: 1rem;
 }
 
@@ -132,7 +137,7 @@ ul {
 }
 
 /* responsive code */
-@media only screen and (max-with: 768px) {
+@media only screen and (max-with: 800px) {
     header {
         background-color: white;
         display: flex;
@@ -140,6 +145,12 @@ ul {
         flex-direction: row;
         justify-content: flex-start;
     }
+
+    #mapid.active {
+        margin: 0;
+        height: 400px;
+        min-width: 100%;
+}
 
     #search-form {
         display: flex;
@@ -201,11 +212,16 @@ ul {
     }
 }
 
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 400px) {
     main {
         margin: 0px;
         padding: 0px;
     }
+
+    #mapid.active {
+        margin: 0;
+        height: 400px;
+        min-width: 100%;
 
     header {
         display: flex;
@@ -216,11 +232,74 @@ ul {
     #search-form {
         display: flex;
         flex-direction: column;
-        justify-content: left;
+        align-items: center;
+        font-size: 1rem;
+        line-height: rem;
     }
 
-    #mapid {
-        margin: 0;
+    select {
+        height: 2rem;
+        font-size: 1rem;
+        line-height: 2rem;
+        background-color: white;
+        margin-top: 2rem;
+    }
+
+    label {
+        height: 2rem;
+        font-size: 1rem;
+        line-height: 2rem;
+    }
+
+    input {
+        height: 2rem;
+        font-size: 1rem;
+        line-height: 2rem;
+        background-color: white;
+    }
+
+     #lat-lon {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        margin: 1rem 0rem .1rem 0rem;
+        width: 8rem;
+    }
+
+    #type-pitches-ratings {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        margin: 1rem 0rem 1rem 0rem;
+        width: 10rem;
+    }
+
+    #rating-stars {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        margin: 1rem 0rem 1rem 0rem;
+        width: 10rem;
+    }
+
+    #nav {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        margin: 1rem 0rem 1rem 0rem;
+        width: 10rem;
+    }
+
+    select {
+        height: 1.5rem;
+        margin: 0rem 1rem 0rem 1rem;
+    }
+
+    button {
+        width: 8rem;
+        height: 1.5rem;
+        margin-top: 2rem;
+        background-color: lightgrey;
     }
 
     #desk-top.active {
