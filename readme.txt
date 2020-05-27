@@ -1,6 +1,6 @@
 Mountain Project Data API
 
-surge domain: aromatic-floor.surge.sh
+surge domain: http://climbers-routes.surge.sh/
 
 mapbox token: pk.eyJ1IjoiY29uYmVjIiwiYSI6ImNrNHE3dWdvZDM2MzczanF4aDNiZjZweXgifQ.hicY00hru5iAZ4dg_0Cupg
 
